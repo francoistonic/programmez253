@@ -1,0 +1,1253 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf600
+{\fonttbl\f0\froman\fcharset0 Times-Italic;\f1\froman\fcharset0 TimesNewRomanPSMT;\f2\froman\fcharset0 TimesNewRomanPS-ItalicMT;
+\f3\froman\fcharset0 Times-Roman;\f4\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red4\green51\blue255;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\csgenericrgb\c1680\c19831\c100000;\csgenericrgb\c0\c0\c0;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f0\i\fs18 \cf2 \
+void setup() 
+\f1\i0\fs24 \cf3 \{
+\f0\i\fs18 \cf2 \
+  Serial.begin(115200); // port deb
+\f1\i0\fs24 \cf3 u
+\f0\i\fs18 \cf2 g\
+  Serial2.begin(1200, SERIAL_7E1); // port mini
+\f1\i0\fs24 \cf3 t
+\f2\i\fs18 \cf2 e
+\f1\i0\fs24 \cf3 l
+\f0\i\fs18 \cf2 \
+\}\
+\
+void lo
+\f1\i0\fs24 \cf3 o
+\f0\i\fs18 \cf2 p() \{\
+  // redirection debug -> 
+\f1\i0\fs24 \cf3 m
+\f0\i\fs18 \cf2 initel\
+  while (Serial.available(
+\f1\i0\fs24 \cf3 )
+\f0\i\fs18 \cf2  > 0) \{\
+    Serial2.write(Serial
+\f1\i0\fs24 \cf3 .
+\f0\i\fs18 \cf2 rea
+\f1\i0\fs24 \cf3 d
+\f0\i\fs18 \cf2 ());\
+  \}\
+ // redirection minit
+\f1\i0\fs24 \cf3 e
+\f0\i\fs18 \cf2 l -> debug\
+  while (Serial2.availa
+\f1\i0\fs24 \cf3 b
+\f0\i\fs18 \cf2 le() > 0) \{\
+    Serial.write(Ser
+\f1\i0\fs24 \cf3 i
+\f0\i\fs18 \cf2 al
+\f2 2
+\f1\i0\fs24 \cf3 .
+\f2\i\fs18 \cf2 r
+\f1\i0\fs24 \cf3 e
+\fs18 ad(
+\f3 \cf2 ));\
+  \}\
+\}
+\f1\fs24 \cf3 \
+
+\f3\fs18 \cf2 \
+\
+\
+// librarie
+\f1\fs24 \cf3 s
+\f3\fs18 \cf2 \
+#include <WiFi.h>\
+#include
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 <WebSocketsClient.h>\
+#incl
+\f1\fs24 \cf3 u
+\fs18 \cf2 d
+\f3 e <Minitel1B_Hard
+\f1\fs24 \cf3 .
+\f3\fs18 \cf2 h>\
+\
+// minitel config\
+#de
+\f1\fs24 \cf3 f
+\f3\fs18 \cf2 ine MINITEL_PORT Serial2
+\f1\fs24 \cf3 \
+
+\f3\fs18 \cf2 #define MINITEL_BAUD 4800\
+#defin
+\f1\fs24 \cf3 e
+\fs18 \cf2  
+\f3 MINITEL_DISABLE_ECH
+\f1\fs24 \cf3 O
+\f3\fs18 \cf2  true\
+\
+// wifi credentials\
+co
+\f1\fs24 \cf3 n
+\f3\fs18 \cf2 st char* ssid     = "mySsid";\
+const
+\f1\fs24 \cf3  
+\fs18 \cf2 c
+\f3 har* password = "m
+\f1\fs24 \cf3 y
+\f3\fs18 \cf2 Password";\
+\
+// host parameters\
+char* host = "h
+\f1\fs24 \cf3 o
+\f3\fs18 \cf2 me.teletel.org";
+\f1\fs24 \cf3 \
+i
+\f3\fs18 \cf2 nt port = 9001;\
+char* path
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 = "/";\
+\
+WebSocketsClient web
+\f1\fs24 \cf3 S
+\fs18 \cf2 o
+\f3 cket;\
+Minitel
+\f1\fs24 \cf3  
+\fs18 \cf2 m
+\f3 initel(MINITEL_PORT
+\f1\fs24 \cf3 )
+\f3\fs18 \cf2 ;\
+\
+void setup() \{\
+\
+  // minitel
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 set-up\
+  int baud = minite
+\f1\fs24 \cf3 l
+\f3\fs18 \cf2 .searchSpeed();\
+  if (baud != MINITEL_BAUD)
+\f1\fs24 \cf3 \
+
+\f3\fs18 \cf2     baud = minitel.changeSp
+\f1\fs24 \cf3 e
+\f3\fs18 \cf2 ed(MINITEL_BAUD);\
+  if 
+\f1\fs24 \cf3 (
+\fs18 \cf2 M
+\f3 INITEL_DISABLE_ECHO)\
+    minitel.echo(false);\
+\
+
+\f1\fs24 \cf3  
+\f3\fs18 \cf2  // WiFi connection\
+  WiFi.begin(ssid,
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 password);\
+  
+\f1\fs24 \cf3 w
+\fs18 \cf2 h
+\f3 ile (WiFi.status() != WL_CONNECTED)\
+ 
+\f1\fs24 \cf3  
+\f3\fs18 \cf2   delay(10);\
+\
+  // Websocket conne
+\f1\fs24 \cf3 c
+\f3\fs18 \cf2 tion and callback\
+  webSocket.begin
+\f1\fs24 \cf3 (
+\fs18 \cf2 ho
+\fs24 \cf3 s
+\fs18 \cf2 t
+\f3 , port, path)
+\f1\fs24 \cf3 ;
+\f3\fs18 \cf2 \
+  webSocket.onEvent(webS
+\f1\fs24 \cf3 o
+\f3\fs18 \cf2 cketEvent);\
+\
+\}\
+
+\f1\fs24 \cf3 \
+
+\fs18 \cf2 v
+\f3 oid loop() \{\
+\
+  // We
+\f1\fs24 \cf3 b
+\f3\fs18 \cf2 socket -> Minitel\
+  webSocket.loop();\
+\
+/
+\f1\fs24 \cf3 /
+\f3\fs18 \cf2  Minitel -> Webso
+\f1\fs24 \cf3 c
+\f3\fs18 \cf2 ket\
+  uint32_t key = minitel.getKeyCode(f
+\f1\fs24 \cf3 a
+\f3\fs18 \cf2 lse);\
+  if (key != 0) 
+\f1\fs24 \cf3 \{
+\f3\fs18 \cf2 \
+    // prepare da
+\f1\fs24 \cf3 t
+\f3\fs18 \cf2 a to send over websocket\
+    uint8_t payload[4
+\f1\fs24 \cf3 ]
+\f3\fs18 \cf2 ;\
+    size_t len = 0;\
+    for (len
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 = 0; key != 0 && len 
+\f1\fs24 \cf3 <
+\f3\fs18 \cf2  4; l
+\f1\fs24 \cf3 e
+\f3\fs18 \cf2 n++) \{\
+      payload[3-len] = uint8_t(key
+\f1\fs24 \cf3 )
+\f3\fs18 \cf2 ;\
+
+\f1\fs24 \cf3  
+\fs18 \cf2  
+\fs24 \cf3  
+\fs18 \cf2  
+\f3   key = key >> 8;\
+    \}\
+    webSocket.sendTXT(payload+4-len, len)
+\f1\fs24 \cf3 ;
+\f3\fs18 \cf2 \
+  \}\
+\}\
+\
+void webSocketEv
+\f1\fs24 \cf3 e
+\f3\fs18 \cf2 nt(WStype_t type, ui
+\f1\fs24 \cf3 n
+\f3\fs18 \cf2 t8_t * payload, size_t len) \{\
+  if (typ
+\f1\fs24 \cf3 e
+\f3\fs18 \cf2  == Wstype_TEXT) \{\
+      if (len > 0) \{\
+      
+\f1\fs24 \cf3  
+\f3\fs18 \cf2  fo
+\f1\fs24 \cf3 r
+\fs18 \cf2  
+\fs24 \cf3 (
+\fs18 siz
+\f3 \cf2 e_t i = 0; i < len; i++)\
+        
+\f1\fs24 \cf3  
+\f3\fs18 \cf2  minitel.writeByte(payload[i]);\
+      \}\
+  \}\
+\}\
+
+\f1\fs24 \cf3 \
+
+\f3\fs18 \cf2 \
+\
+void MiniChess::drawChessBoard() \{\
+  // Fonction d'affichag
+\f1\fs24 \cf3 e
+\f3\fs18 \cf2  du plateau de jeu seul\
+  \
+  // on se place 
+\f1\fs24 \cf3 e
+\f3\fs18 \cf2 n haut \'e0 gauche sur la case A8 qui est bl
+\f1\fs24 \cf3 a
+\f3\fs18 \cf2 nche\
+  minitel.moveCursorXY(BOARD_LEFT, BOA
+\f1\fs24 \cf3 R
+\f3\fs18 \cf2 D_TOP);\
+  bool dark = false; //couleur de 
+\f1\fs24 \cf3 l
+\f3\fs18 \cf2 a case\
+  int cy =
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 8; // numero de 
+\f1\fs24 \cf3 c
+\f3\fs18 \cf2 ase en ordonn\'e9es\
+  // on boucle sur les cases de haut
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 en bas\
+  while (cy > 0) \{\
+    
+\f1\fs24 \cf3 i
+\f3\fs18 \cf2 nt row = 1;\
+    // on boucle sur les 3 lignes c
+\f1\fs24 \cf3 o
+\f3\fs18 \cf2 nstituant une case\
+    while (row <= CASE_HEIGHT) 
+\f1\fs24 \cf3 \{
+\f3\fs18 \cf2 \
+      int cx = 1; //
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 numero de case en abscisses\
+      // on boucle sur les cases de 
+\f1\fs24 \cf3 g
+\f3\fs18 \cf2 auche \'e0 droite\
+      while
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 (cx < 9) \{\
+        // on passe en mode texte pour afficher le nom de la case\
+   
+\f1\fs24 \cf3  
+\f3\fs18 \cf2     minitel.textMode();\
+        // on r\'e8gle la coul
+\f1\fs24 \cf3 e
+\f3\fs18 \cf2 ur de caract\'e8re que l'on passe en arri\'e8re plan 
+\f1\fs24 \cf3 e
+\f3\fs18 \cf2 nsuite\
+        if (dark) minitel.attribut
+\f1\fs24 \cf3 s
+\f3\fs18 \cf2 (CARACTERE_BLEU);\
+        else minitel.attributs(CARACTE
+\f1\fs24 \cf3 R
+\f3\fs18 \cf2 E_VERT);\
+        minitel.attributs(INVERSION_FOND);\
+   
+\f1\fs24 \cf3  
+\f3\fs18 \cf2     if (row == 1) minitel.printChar(cx+64);    // A-H\
+     
+\f1\fs24 \cf3  
+\f3\fs18 \cf2   if (row == 2) minitel.printChar(cy+48); 
+\f1\fs24 \cf3  
+\f3\fs18 \cf2   // 1-8\
+        if (row == 3
+\f1\fs24 \cf3 )
+\f3\fs18 \cf2  minitel.printChar(SP);       // ESPACE\
+
+\f1\fs24 \cf3  
+\f3\fs18 \cf2        // on passe en mode semi-graphique\
+    
+\f1\fs24 \cf3  
+\f3\fs18 \cf2    minitel.graphicMode();\
+        // on r
+\f1\fs24 \cf3 \'e8
+\f3\fs18 \cf2 gle la couleur de la case\
+        if (
+\f1\fs24 \cf3 d
+\f3\fs18 \cf2 ark) minitel.attributs(FOND_BLEU);\
+        else minitel.attribut
+\f1\fs24 \cf3 s
+\f3\fs18 \cf2 (FOND_VERT);\
+        // on dessine un 
+\f1\fs24 \cf3 c
+\f3\fs18 \cf2 arcat\'e8re vide\
+        minitel.graphic(0b000000);\
+   
+\f1\fs24 \cf3  
+\f3\fs18 \cf2     // qu'on r\'e9p\'e8te 2 fois\
+  
+\f1\fs24 \cf3  
+\f3\fs18 \cf2      mi
+\f1\fs24 \cf3 n
+\f3\fs18 \cf2 itel.repeat(CASE_WIDTH - 2);\
+        dark 
+\f1\fs24 \cf3 =
+\f3\fs18 \cf2  !dark; // changement de couleur
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 de case\
+        cx++; // case
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 suiva
+\f1\fs24 \cf3 n
+\f3\fs18 \cf2 te\
+      \}\
+      minitel.moveCursorLeft(CASE_W
+\f1\fs24 \cf3 I
+\f3\fs18 \cf2 DTH*8);\
+      minitel.mov
+\f1\fs24 \cf3 e
+\f3\fs18 \cf2 Cur
+\f1\fs24 \cf3 s
+\fs18 \cf2 o
+\fs24 \cf3 rD
+\fs18 ow
+\f3 \cf2 n(1);\
+      row++; // li
+\f1\fs24 \cf3 g
+\f3\fs18 \cf2 ne suivante\
+    \}\
+  dar
+\f1\fs24 \cf3 k
+\fs18 \cf2  
+\f3 = !dark; // changement de couleur de case\
+  cy--; // 
+\f1\fs24 \cf3 r
+\f3\fs18 \cf2 ang\'e9e suivante\
+  \}\
+\}\
+\
+\
+\
+#define COLOR_MASK 0b1000\
+#define PIE
+\f1\fs24 \cf3 C
+\f3\fs18 \cf2 E_MASK 0b0111\
+\
+    // Identification des pi\'e8ces de j
+\f1\fs24 \cf3 e
+\f3\fs18 \cf2 ux (
+\f1\fs24 \cf3 P
+\f3\fs18 \cf2 IECE+COLOR)\
+    enum \{ VOID, PAWN, ROOK, KNIGHT, BISHOP, QUEEN, KING\}; // PIECES
+\f1\fs24 \cf3 \
+
+\f3\fs18 \cf2     enum \{_BLACK = 0b0000, _WHITE = 0b1000\}; // 
+\f1\fs24 \cf3 C
+\f3\fs18 \cf2 OLORS\
+    \
+    // Pieces en 3*3 caract\'e8res semi-graphiques d\'e9crits dans le sens de la lecture\
+    byte
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 piece[7][PIECE_WIDTH*PIECE_HEIGHT] = \{ \
+      \{0b000000, 0b000000, 0b000000, 0b000000, 0b000000, 0b00000
+\f1\fs24 \cf3 0
+\f3\fs18 \cf2 , 0b000000, 0b000000, 0b000000\}, // VOID\
+      \{0b000000, 0b000000, 0b000000, 0b000101, 0b101111, 0b0000
+\f1\fs24 \cf3 0
+\f3\fs18 \cf2 0, 0b000100, 0b101100, 0b000000\}, // PAWN\
+      \{0b000010, 0b000010, 0b000010, 0b110101, 0b111101, 0b10000
+\f1\fs24 \cf3 0
+\f3\fs18 \cf2 , 0b011100, 0b011100, 0b001000\}, // ROOK\
+      \{0b000000, 0b000111, 0b000010, 0b011110, 0b011101, 0b101010
+\f1\fs24 \cf3 ,
+\f3\fs18 \cf2  0b001100, 0b111100, 0b001000\}, // KNIGHT\
+      \{0b000001, 0b001011, 0b000000, 0b111111, 0b101111, 0b1010
+\f1\fs24 \cf3 1
+\f3\fs18 \cf2 0, 0b011100, 0b111100, 0b001000\}, // BISHOP\
+      \{0b001001, 0b000011, 0b001000, 0b000111, 0b101111, 0b
+\f1\fs24 \cf3 0
+\f3\fs18 \cf2 00010,
+\f1\fs24 \cf3  
+\fs18 \cf2 0
+\f3 b1111
+\f1\fs24 \cf3 0
+\fs18 \cf2 0
+\f3 , 0b011100, 0b101000\}, // QUEEN\
+      \{0b000001, 0b
+\f1\fs24 \cf3 0
+\f3\fs18 \cf2 01011, 0b000000, 0b000111, 0b101111, 0b000010, 0b111100, 0
+\f1\fs24 \cf3 b
+\f3\fs18 \cf2 011100, 0b101000\} // KING\
+    \};\
+\
+[...]\
+\
+void MiniC
+\f1\fs24 \cf3 h
+\f3\fs18 \cf2 es
+\f1\fs24 \cf3 s
+\f3\fs18 \cf2 ::drawPiece(int cx, int cy, byte pc) \{\
+  // Fonction p
+\f1\fs24 \cf3 o
+\f3\fs18 \cf2 ur afficher une pi\'e8ce dans une case don
+\f1\fs24 \cf3 n
+\f3\fs18 \cf2 \'e9e\
+  // avec pc: l'identifiant de la p
+\f1\fs24 \cf3 i
+\f3\fs18 \cf2 \'e8c
+\f1\fs24 \cf3 e
+\f3\fs18 \cf2  et de la couleur\
+  \
+  // on d\'e9termin
+\f1\fs24 \cf3 e
+\f3\fs18 \cf2  les coordonn\'e9es du curseur du 
+\f1\fs24 \cf3 m
+\f3\fs18 \cf2 initel\
+  int x = cx * CASE
+\f1\fs24 \cf3 _
+\f3\fs18 \cf2 WI
+\f1\fs24 \cf3 D
+\f3\fs18 \cf2 TH + BOARD_LEFT;\
+  int y = cy * CASE_HEIGHT + BOARD_TOP
+\f1\fs24 \cf3 ;
+\f3\fs18 \cf2 \
+  \
+  // on r\'e9cup\'e8re l
+\f1\fs24 \cf3 a
+\f3\fs18 \cf2  couleur et la pi\'e8ce\
+  
+\f1\fs24 \cf3 b
+\f3\fs18 \cf2 yte color = pc & COLOR_MASK;\
+  byte p = pc & 
+\f1\fs24 \cf3 P
+\f3\fs18 \cf2 IECE_MASK;\
+  \
+  // on passe en mode
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 graphique et on r\'e8gle les couleurs\
+  m
+\f1\fs24 \cf3 i
+\f3\fs18 \cf2 ni
+\f1 t
+\fs24 \cf3 e
+\f3\fs18 \cf2 l.graphicMode();\
+
+\f1\fs24 \cf3  
+\f3\fs18 \cf2  if (color == _WHITE) \{\
+    // effet 
+\f1\fs24 \cf3 l
+\f3\fs18 \cf2 ig
+\f1 n
+\fs24 \cf3 a
+\f3\fs18 \cf2 ge pour am\'e9liorer la nettet\'e9\
+    minit
+\f1\fs24 \cf3 e
+\f3\fs18 \cf2 l.attributs(DEBUT_LIGNAGE);\
+    minitel.attributs(
+\f1\fs24 \cf3 C
+\f3\fs18 \cf2 ARACTERE_BLANC);\
+  \}\
+  else \{ // _
+\f1\fs24 \cf3 B
+\f3\fs18 \cf2 LACK\
+    minitel.attributs(CARACTERE_NOIR);\
+  
+\f1\fs24 \cf3 \}
+\f3\fs18 \cf2 \
+  // on d\'e9termine la couleur de la case
+\f1\fs24 \cf3 \
+
+\f3\fs18 \cf2   if ((cx+cy)%2 == 1) minitel.attr
+\f1\fs24 \cf3 i
+\f3\fs18 \cf2 buts(FOND_BLEU);\
+  else minitel.attributs(
+\f1\fs24 \cf3 F
+\f3\fs18 \cf2 OND_VERT);\
+  // on dessine la pi\'e8ce caract\'e8re pa
+\f1\fs24 \cf3 r
+\f3\fs18 \cf2  cara
+\f1\fs24 \cf3 c
+\f3\fs18 \cf2 t\'e8r
+\f1\fs24 \cf3 e
+\f3\fs18 \cf2 \
+  for (int j = 0; j < 
+\f1\fs24 \cf3 P
+\f3\fs18 \cf2 IECE_HEIGHT; j++) \{\
+    minitel.mo
+\f1\fs24 \cf3 v
+\f3\fs18 \cf2 eC
+\f1 u
+\fs24 \cf3 r
+\fs18 \cf2 s
+\fs24 \cf3 o
+\fs18 rXY
+\f3 \cf2 (x+1,y+j);\
+    for (int i = 0; i < PIECE_WIDTH; i++) \{\
+      minitel.
+\f1\fs24 \cf3 g
+\f3\fs18 \cf2 raphic(piece[p][i+j*PIECE_WIDTH]);\
+    \}\
+  \}\
+  if (color == _WH
+\f1\fs24 \cf3 I
+\f3\fs18 \cf2 TE) \{\
+    minitel.attributs(FIN_LIGNAGE);\
+  \}\
+\}\
+\
+\
+\
+void MiniChes
+\f1\fs24 \cf3 s
+\f3\fs18 \cf2 ::markCase(int cx, int cy, bool mark, bool force_erase) \{\
+  // Fonction pou
+\f1\fs24 \cf3 r
+\f3\fs18 \cf2  marqu\'e9 la case courante dans le coin bas-gauche\
+  // Si mark =
+\f1\fs24 \cf3  \cf2 t
+\f3\fs18 rue, la marque de position ou de selection est aff
+\f1\fs24 \cf3 i
+\f3\fs18 \cf2 ch\'e9e\
+  // Si mark = false, la marque
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 est effac\'e9e sauf s\'92il s\'92agit de la select
+\f1\fs24 \cf3 i
+\f3\fs18 \cf2 on\
+  // auquel cas il faut 
+\f1\fs24 \cf3 m
+\f3\fs18 \cf2 ettre force_erase = true pour l\'92
+\f1\fs24 \cf3 e
+\f3\fs18 \cf2 ffacer\
+\
+  // on place 
+\f1\fs24 \cf3 l
+\f3\fs18 \cf2 e curseur du minitel au bon endroit\
+  int x = cx*CASE_WI
+\f1\fs24 \cf3 D
+\f3\fs18 \cf2 TH + BOARD_LEFT;\
+  
+\f1\fs24 \cf3 i
+\f3\fs18 \cf2 nt y = cy*CASE_HEIGHT + BOARD_TOP 
+\f1\fs24 \cf3 +
+\f3\fs18 \cf2  2;\
+  minitel.moveCursorXY(x,y);\
+  // on se met en mode graphique\
+  mini
+\f1\fs24 \cf3 t
+\f3\fs18 \cf2 el.graphicMode();\
+  // on d\'e9termine
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 si on est sur une case sombre ou claire\
+  bool dark 
+\f1\fs24 \cf3 =
+\f3\fs18 \cf2  false;\
+  if ((cx+cy)%2 == 1) dark = true;\
+  // on ajus
+\f1\fs24 \cf3 t
+\f3\fs18 \cf2 e la couleur de fond\
+  if (dark) minit
+\f1\fs24 \cf3 e
+\f3\fs18 \cf2 l.attributs(FOND_BLEU);\
+  else m
+\f1\fs24 \cf3 i
+\f3\fs18 \cf2 nitel.attributs(FOND_VERT);\
+  // on d\'e9
+\f1\fs24 \cf3 t
+\f3\fs18 \cf2 ermine si on est sur la case 
+\f1\fs24 \cf3 s
+\f3\fs18 \cf2 \'e9lectionn\'e9e \
+  bool selected = (cx == s
+\f1\fs24 \cf3 c
+\f3\fs18 \cf2 x && cy == scy);\
+  if (mark)
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 \{\
+    // on d\'e9termine la c
+\f1\fs24 \cf3 o
+\f3\fs18 \cf2 uleur \'e0 mettre\
+    byte colo
+\f1\fs24 \cf3 r
+\f3\fs18 \cf2  = CARACTERE_BLANC;\
+    if (s
+\f1\fs24 \cf3 e
+\f3\fs18 \cf2 lec
+\f1\fs24 \cf3 t
+\f3\fs18 \cf2 ed && (player == _WHITE)
+\f1\fs24 \cf3 )
+\f3\fs18 \cf2 \
+      color = CARACTERE_NOIR;\
+
+\f1\fs24 \cf3  
+\f3\fs18 \cf2    if (!selected && (player 
+\f1\fs24 \cf3 =
+\f3\fs18 \cf2 = _BLACK))\
+      color = CARACT
+\f1\fs24 \cf3 E
+\f3\fs18 \cf2 RE_
+\f1\fs24 \cf3 N
+\fs18 \cf2 O
+\fs24 \cf3 I
+\fs18 R
+\fs24 ;
+\f3\fs18 \cf2 \
+    // on affiche la marq
+\f1\fs24 \cf3 u
+\f3\fs18 \cf2 e\
+    minitel.attributs(color);\
+    minitel.graphic(0b1111
+\f1\fs24 \cf3 1
+\f3\fs18 \cf2 1);\
+  \}\
+  els
+\f1\fs24 \cf3 e
+\f3\fs18 \cf2  \{ // mark = false\
+    if 
+\f1\fs24 \cf3 (
+\f3\fs18 \cf2 !selected
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 || force_erase)\
+      // 
+\f1\fs24 \cf3 o
+\f3\fs18 \cf2 n 
+\f1 e
+\fs24 \cf3 f
+\fs18 \cf2 f
+\fs24 \cf3 a
+\fs18 ce l
+\f3 \cf2 a marque\
+      minitel.graphic(0b000000);\
+ 
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 \}\
+\}\
+\
+\
+\
+void MiniChess::moveUp() \{\
+  // Foncti
+\f1\fs24 \cf3 o
+\f3\fs18 \cf2 n 
+\f1\fs24 \cf3 p
+\f3\fs18 \cf2 our d\'e9placer la postion courante vers le ha
+\f1\fs24 \cf3 u
+\f3\fs18 \cf2 t\
+  if (cy > 0)
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 \{\
+ 
+\f1\fs24 \cf3  
+\f3\fs18 \cf2   markCase(cx,cy, false);\
+    cy--;\
+    
+\f1\fs24 \cf3 m
+\f3\fs18 \cf2 arkCase(cx,cy, true)
+\f1\fs24 \cf3 ;
+\f3\fs18 \cf2 \
+  \}\
+\}\
+\
+\
+\
+\
+un
+\f1\fs24 \cf3 s
+\f3\fs18 \cf2 igned long MiniC
+\f1\fs24 \cf3 h
+\f3\fs18 \cf2 ess::getKeybo
+\f1\fs24 \cf3 a
+\f3\fs18 \cf2 rdInput() \{\
+
+\f1\fs24 \cf3  
+\f3\fs18 \cf2  // Fonction pour rediriger les saisies du clavier
+\f1\fs24 \cf3 \
+
+\f3\fs18 \cf2   \
+
+\f1\fs24 \cf3  
+\f3\fs18 \cf2  unsigned long k
+\f1\fs24 \cf3 e
+\f3\fs18 \cf2 y = minitel.get
+\f1\fs24 \cf3 K
+\f3\fs18 \cf2 eyCode();\
+ 
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 switch (key) \{\
+    \
+    // Annulation de la s\'e9lec
+\f1\fs24 \cf3 t
+\f3\fs18 \cf2 ion 
+\f1\fs24 \cf3 e
+\f3\fs18 \cf2 n cours\
+    case CORRE
+\f1\fs24 \cf3 C
+\f3\fs18 \cf2 TION:\
+    case ANNULAT
+\f1\fs24 \cf3 I
+\f3\fs18 \cf2 ON:\
+    case RETO
+\f1\fs24 \cf3 U
+\f3\fs18 \cf2 R:\
+    case ESC:\
+ 
+\f1\fs24 \cf3  
+\f3\fs18 \cf2   case DEL:\
+  
+\f1\fs24 \cf3  
+\f3\fs18 \cf2                
+\f1\fs24 \cf3  
+\f3\fs18 \cf2             return CAN;   break;\
+    \
+    // S\'e9le
+\f1\fs24 \cf3 c
+\f3\fs18 \cf2 tion\
+    case ENVOI:\
+   
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 case SP:\
+  
+\f1\fs24 \cf3  
+\f3\fs18 \cf2                             return CR;    break;\
+ 
+\f1\fs24 \cf3  
+\f3\fs18 \cf2   \
+
+\f1\fs24 \cf3  
+\f3\fs18 \cf2    
+\f1\fs24 \cf3 /
+\fs18 \cf2 /
+\fs24 \cf3  \cf2 T
+\f3\fs18 ouches inhib\'e9es\
+    case C
+\f1\fs24 \cf3 O
+\f3\fs18 \cf2 NNEXION_FIN:\
+    case SOMMAIRE:\
+    case R
+\f1\fs24 \cf3 E
+\f3\fs18 \cf2 PETITION:\
+    case GUI
+\f1\fs24 \cf3 D
+\f3\fs18 \cf2 E:\
+    case SUITE:\
+  
+\f1\fs24 \cf3  
+\f3\fs18 \cf2                      
+\f1\fs24 \cf3  
+\f3\fs18 \cf2       return 0;     break;\
+    \
+    // 
+\f1\fs24 \cf3 A
+\f3\fs18 \cf2 utres touches\
+  
+\f1\fs24 \cf3  
+\f3\fs18 \cf2  default:\
+       
+\f1\fs24 \cf3  
+\f3\fs18 \cf2                        return k
+\f1\fs24 \cf3 e
+\f3\fs18 \cf2 y;   break;\
+    \
+  \}\
+\}\
+\
+void MiniChess::getMove()
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 \{\
+  // Fonction pour acqu\'e9rir le prochain coup\
+  boo
+\f1\fs24 \cf3 l
+\f3\fs18 \cf2  gotMove = false;\
+  \
+  while (!gotMove) \{\
+    // Sa
+\f1\fs24 \cf3 i
+\f3\fs18 \cf2 sie clavier\
+    unsigned long c = getKeyboardInput();\
+    if (c != 0) \{\
+
+\f1\fs24 \cf3  
+\f3\fs18 \cf2      switch (c) 
+\f1\fs24 \cf3 \{
+\f3\fs18 \cf2 \
+        // Mouvement du c
+\f1\fs24 \cf3 u
+\f3\fs18 \cf2 rseur\
+        case TOUCHE
+\f1\fs24 \cf3 _
+\f3\fs18 \cf2 FLECHE_HAUT:   moveUp();    break;\
+  
+\f1\fs24 \cf3  
+\f3\fs18 \cf2      case TOUCHE_FLECHE_BAS:    moveDown();  break;\
+        cas
+\f1\fs24 \cf3 e
+\f3\fs18 \cf2  TOUCHE_FLECH
+\f1\fs24 \cf3 E
+\f3\fs18 \cf2 _GAUCHE: mo
+\f1\fs24 \cf3 v
+\f3\fs18 \cf2 eLeft();  break;\
+        c
+\f1\fs24 \cf3 a
+\f3\fs18 \cf2 se TOUCHE_FLECHE
+\f1\fs24 \cf3 _
+\f3\fs18 \cf2 DROITE: moveRight(); break;\
+    
+\f1\fs24 \cf3  
+\f3\fs18 \cf2    // Selection\
+        case
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 CR:\
+        
+\f1\fs24 \cf3  
+\f3\fs18 \cf2  // Case de
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 d\'e9part\
+        
+\f1\fs24 \cf3  
+\f3\fs18 \cf2  if (scx == -1) \{\
+  
+\f1\fs24 \cf3  
+\f3\fs18 \cf2          if (vali
+\f1\fs24 \cf3 d
+\f3\fs18 \cf2 ateSelection()) \{\
+                markCase(
+\f1\fs24 \cf3 c
+\f3\fs18 \cf2 x, cy, true); // marqueur 
+\f1\fs24 \cf3 d
+\f3\fs18 \cf2 e selection\
+            \}\
+          \}\
+        
+\f1\fs24 \cf3  
+\f3\fs18 \cf2  // Case d'arriv\'e9e\
+          else \{\
+      
+\f1\fs24 \cf3  
+\f3\fs18 \cf2      if (validateMove()) \{\
+              gotMove = true;\
+
+\f1\fs24 \cf3  
+\f3\fs18 \cf2            \}\
+          \}\
+          br
+\f1\fs24 \cf3 e
+\f3\fs18 \cf2 ak;\
+        // Annulation\
+        c
+\f1\fs24 \cf3 a
+\f3\fs18 \cf2 se CAN:\
+          // S'il y a 
+\f1\fs24 \cf3 u
+\f3\fs18 \cf2 ne selecti
+\f1 o
+\fs24 \cf3 n
+\f3\fs18 \cf2  en cours\
+     
+\f1\fs24 \cf3  
+\f3\fs18 \cf2     if 
+\f1\fs24 \cf3 (
+\f3\fs18 \cf2 scx !
+\f1\fs24 \cf3 =
+\f3\fs18 \cf2  -1
+\f1\fs24 \cf3 )
+\fs18 \cf2  
+\fs24 \cf3 \{
+\fs18 \
+  
+\f3 \cf2           // on efface le ma
+\f1\fs24 \cf3 r
+\f3\fs18 \cf2 queur de selection\
+            markCase(scx, scy,
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 false, true);\
+            // on affic
+\f1\fs24 \cf3 h
+\f3\fs18 \cf2 e le marqueur
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 de position si besoin\
+  
+\f1\fs24 \cf3  
+\f3\fs18 \cf2          if (scx == cx && scy ==
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 cy)\
+              markCase(cx, c
+\f1\fs24 \cf3 y
+\f3\fs18 \cf2 , true);\
+            scx = -1; scy =
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 -1;\
+          \}\
+          br
+\f1\fs24 \cf3 e
+\f3\fs18 \cf2 ak;\
+      \}\
+    \}\
+  \}\
+\}\
+\
+\
+\
+\
+void MiniChess::makeMove() \{\
+
+\f1\fs24 \cf3  
+\f3\fs18 \cf2  // Fonction pour afficher le mouveme
+\f1\fs24 \cf3 n
+\f3\fs18 \cf2 t de pi\'e8ces\
+  // en g\'e9rant les mo
+\f1\fs24 \cf3 u
+\f3\fs18 \cf2 vements sp\'e9ciaux\
+  drawMov
+\f1\fs24 \cf3 e
+\f3\fs18 \cf2 ();\
+  byte b = board[cx]
+\f1\fs24 \cf3 [
+\f3\fs18 \cf2 cy];\
+  // Petit roqu
+\f1\fs24 \cf3 e
+\f3\fs18 \cf2   et Gran
+\f1\fs24 \cf3 d
+\f3\fs18 \cf2  roque\
+  if ((b & PIECE_MASK) ==
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 KING) \{\
+    if ((b & COLOR_MASK) == 
+\f1\fs24 \cf3 _
+\f3\fs18 \cf2 BLACK) \{\
+      Serial.println("BL
+\f1\fs24 \cf3 A
+\f3\fs18 \cf2 CK");\
+      if (scx == 4 &
+\f1\fs24 \cf3 &
+\f3\fs18 \cf2  scy == 0) \{\
+        if 
+\f1\fs24 \cf3 (
+\f3\fs18 \cf2 cx == 1 && cy == 0) \{\
+        
+\f1\fs24 \cf3  
+\f3\fs18 \cf2  // roq
+\f1\fs24 \cf3 u
+\f3\fs18 \cf2 e des
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 noirs \'e0 gauche\
+          markCase(cx
+\f1\fs24 \cf3 ,
+\f3\fs18 \cf2  cy, false);\
+          scx = 0; 
+\f1\fs24 \cf3 s
+\f3\fs18 \cf2 cy = 0;\
+          cx = 2; cy = 0
+\f1\fs24 \cf3 ;
+\f3\fs18 \cf2 \
+          drawMove();\
+        \}\
+  
+\f1\fs24 \cf3  
+\f3\fs18 \cf2      if (cx == 6 && cy == 0) \{\
+  
+\f1\fs24 \cf3  
+\f3\fs18 \cf2        // roque des noirs \'e0
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 droite\
+          markCas
+\f1\fs24 \cf3 e
+\f3\fs18 \cf2 (cx, cy, false);\
+   
+\f1\fs24 \cf3  
+\f3\fs18 \cf2       sc
+\f1 x
+\fs24 \cf3  
+\f3\fs18 \cf2 = 7; scy = 0;\
+          cx = 5; 
+\f1\fs24 \cf3 c
+\f3\fs18 \cf2 y = 0;\
+          drawMove();\
+       
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 \}\
+      \}\
+    \}\
+    if ((b & CO
+\f1\fs24 \cf3 L
+\f3\fs18 \cf2 OR_MASK) == _WHITE) \{\
+    
+\f1\fs24 \cf3  
+\f3\fs18 \cf2  if (scx == 4 && scy == 7
+\f1\fs24 \cf3 )
+\f3\fs18 \cf2  \{\
+        if (cx ==
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 1 && cy =
+\f1\fs24 \cf3 =
+\f3\fs18 \cf2  7) \{\
+
+\f1\fs24 \cf3  
+\f3\fs18 \cf2      
+\f1\fs24 \cf3  
+\f3\fs18 \cf2    
+\f1\fs24 \cf3 /
+\f3\fs18 \cf2 / roque des blancs \'e0 gauche\
+  
+\f1\fs24 \cf3  
+\f3\fs18 \cf2        markCase(cx, cy, false);\
+
+\f1\fs24 \cf3  
+\f3\fs18 \cf2          scx = 0; scy = 7;\
+         
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 cx = 2; cy = 7;\
+   
+\f1\fs24 \cf3  
+\f3\fs18 \cf2       drawMove();\
+        \}\
+     
+\f1\fs24 \cf3  
+\f3\fs18 \cf2   if (cx == 6 && cy == 7) \{\
+    
+\f1\fs24 \cf3  
+\f3\fs18 \cf2      // roque des blancs \'e0 
+\f1\fs24 \cf3 d
+\f3\fs18 \cf2 roite\
+          markCase(cx, 
+\f1\fs24 \cf3 c
+\f3\fs18 \cf2 y, fals
+\f1\fs24 \cf3 e
+\f3\fs18 \cf2 );\
+ 
+\f1\fs24 \cf3  
+\f3\fs18 \cf2         scx = 7; scy = 7;\
+          
+\f1\fs24 \cf3 c
+\f3\fs18 \cf2 x = 5; cy = 7;\
+    
+\f1\fs24 \cf3  
+\f3\fs18 \cf2      drawMove();\
+        \}\
+      \}\
+    \}\
+  \}\
+  // Promotion de pi
+\f1\fs24 \cf3 o
+\f3\fs18 \cf2 n en Reine\
+  if ((b & PIEC
+\f1\fs24 \cf3 E
+\f3\fs18 \cf2 _MASK) == PAWN) \{\
+    if ((b 
+\f1\fs24 \cf3 &
+\f3\fs18 \cf2  COLOR_
+\f1\fs24 \cf3 M
+\f3\fs18 \cf2 ASK) 
+\f1\fs24 \cf3 =
+\f3\fs18 \cf2 = _
+\f1\fs24 \cf3 B
+\f3\fs18 \cf2 LACK) \{\
+      if (cy == 7) \{\
+  
+\f1\fs24 \cf3  
+\f3\fs18 \cf2      // promotion d'u
+\f1\fs24 \cf3 n
+\fs18 \cf2  
+\fs24 \cf3 p
+\fs18 \cf2 i
+\f3 on 
+\f1\fs24 \cf3 n
+\fs18 \cf2 o
+\f3 ir\
+        byte pc = QUEEN 
+\f1\fs24 \cf3 +
+\f3\fs18 \cf2  _BLACK;\
+        board[cx][cy] = pc;\
+        dr
+\f1\fs24 \cf3 a
+\f3\fs18 \cf2 wPiece(cx, cy, pc);\
+      
+\f1\fs24 \cf3 \}
+\f3\fs18 \cf2 \
+    \}\
+    if ((b 
+\f1\fs24 \cf3 &
+\f3\fs18 \cf2  COLOR_MASK) == _WHITE) \{\
+      if (cy == 0) \{\
+        // promotion 
+\f1\fs24 \cf3 d
+\f3\fs18 \cf2 'un pion blanc\
+       
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 byte pc = QUEEN + _WHITE;\
+        boar
+\f1\fs24 \cf3 d
+\f3\fs18 \cf2 [cx][cy] = pc;\
+        drawPiece(
+\f1\fs24 \cf3 c
+\f3\fs18 \cf2 x, cy, pc);\
+      \}\
+    \}\
+  \}\
+  // on reiniti
+\f1\fs24 \cf3 a
+\f3\fs18 \cf2 lise la selection\
+  scx = -1; scy 
+\f1\fs24 \cf3 =
+\f3\fs18 \cf2  -1;\
+\}\
+\
+[\'85]\
+\
+void MiniChess::draw
+\f1\fs24 \cf3 M
+\f3\fs18 \cf2 ove() \{\
+  // Fonction pou
+\f1\fs24 \cf3 r
+\fs18 \cf2  
+\fs24 \cf3 a
+\fs18 \cf2 f\cf3 fic
+\f3 \cf2 her un mouvement de pi
+\f1\fs24 \cf3 \'e8
+\f3\fs18 \cf2 ce\
+  byte b = board[scx][s
+\f1\fs24 \cf3 c
+\fs18 \cf2 y
+\f3 ];\
+  board[cx][cy] = b;\
+  board[scx][scy] = VOID;\
+  // on efface la pi\'e8ce de la case d'origine\
+ 
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 erasePiece(scx, sc
+\f1\fs24 \cf3 y
+\fs18 \cf2 )
+\f3 ;\
+  // on retire le marqueur 
+\f1\fs24 \cf3 d
+\fs18 \cf2 e
+\f3  s\'e9lection\
+  
+\f1\fs24 \cf3 m
+\f3\fs18 \cf2 arkCase(scx, scy, false, true);\
+  //
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 on dessine la
+\f1\fs24 \cf3  
+\f3\fs18 \cf2 pi\'e8ce \'e0 son nouvel emplacement\
+  drawPie
+\f1\fs24 \cf3 c
+\f3\fs18 \cf2 e(cx, cy, board[cx][cy]);\
+  // on
+\f1\fs24 \cf3  
+\fs18 \cf2 r
+\f3 etire le marqueur de posit
+\f1\fs24 \cf3 i
+\f3\fs18 \cf2 on\
+  markCase(cx, cy, false);\
+\}\
+\
+\
+\
+\
+#include "Mi
+\f1\fs24 \cf3 n
+\f3\fs18 \cf2 ichess.h"\
+#include <Minitel1B_Hard.h>\
+\
+#define MIN
+\f1\fs24 \cf3 I
+\f3\fs18 \cf2 TEL_PORT Serial2 // For ESP32 dev board\
+//#define MI
+\f1\fs24 \cf3 N
+\fs18 \cf2 I
+\fs24 \cf3 T
+\fs18 \cf2 E
+\f3 L_PORT Serial
+\f1\fs24 \cf3 1
+\f3\fs18 \cf2  // For ATMEGA32
+\f1\fs24 \cf3 u
+\f3\fs18 \cf2 4\
+#define BAUDS 480
+\f1\fs24 \cf3 0
+\f3\fs18 \cf2 \
+\
+MiniChess chess(M
+\f1\fs24 \cf3 I
+\f3\fs18 \cf2 NITEL_PORT);\
+\
+void setu
+\f1\fs24 \cf3 p
+\f3\fs18 \cf2 () 
+\f1\fs24 \cf3 \{\
+
+\fs18  
+\fs24  
+\f4 \cf0 // on attend que le minitel d\'e9marre\
+  delay(500);\
+  // r\'e9glage port s\'e9rie et config minitel\
+  chess.initializeMinitel(BAUDS); \
+\
+  // initialisation du jeu\
+  chess.drawChessBoard();     // affichage plateau vide\
+  chess.initPiecesPosition(); // placement des pieces\
+  chess.drawAllPieces();      // affichage des pi\'e8ces\
+\}\
+\
+void loop() \{\
+  while (true) \{\
+    chess.getMove();\
+    chess.makeMove();\
+    chess.changePlayer();\
+  \}\
+\}\
+\
+\
+}

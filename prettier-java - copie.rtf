@@ -1,0 +1,183 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf600
+{\fonttbl\f0\fswiss\fcharset0 ArialMT;}
+{\colortbl;\red255\green255\blue255;\red51\green51\blue51;}
+{\*\expandedcolortbl;;\csgenericrgb\c20000\c20000\c20000;}
+\paperw11905\paperh16837\margl1440\margr1440\vieww23780\viewh17440\viewkind1\viewscale200
+\deftab720
+\pard\pardeftab720\ri-4\sl276\slmult1\qj\partightenfactor0
+
+\f0\fs22 \cf2 public class Prettier \{\
+ \
+  public boolean prettierIsAwesome(int myFirstArgument, int mySecondArgument, int myThirdArgument, int myFourthArgument, int myFifthArgument) \{\
+	if(myFirstArgument == 1 && mySecondArgument == 2 && myThirdArgument == 3 && myFourthArgument == 4 && myFifthArgument == 5) \{\
+  	return true;\
+	\}\
+\
+	// if you do not want to format the next expression\
+	// prettier-ignore\
+	if(myFirstArgument == 1 && mySecondArgument == 1 && myThirdArgument == 1 && myFourthArgument == 1 && myFifthArgument == 1) \{\
+  	return true;\
+	\}\
+\
+	MyObject mo = new MyObject();\
+	return mo.very().very().very().very().very().very().very().very().very().very().very().very().very().longMethod();\
+  \}\
+\}\
+\
+\
+\
+public class Prettier \{\
+\
+  public boolean prettierIsAwesome(\
+	int myFirstArgument,\
+	int mySecondArgument,\
+	int myThirdArgument,\
+	int myFourthArgument,\
+	int myFifthArgument\
+  ) \{\
+	if (\
+  	myFirstArgument == 1 &&\
+  	mySecondArgument == 2 &&\
+  	myThirdArgument == 3 &&\
+  	myFourthArgument == 4 &&\
+  	myFifthArgument == 5\
+	) \{\
+  	return true;\
+	\}\
+\
+	// if do not want to format the next expression\
+	// prettier-ignore\
+	if(myFirstArgument == 1 && mySecondArgument == 1 && myThirdArgument == 1 && myFourthArgument == 1 && myFifthArgument == 1) \{\
+  	return true;\
+	\}\
+\
+	MyObject mo = new MyObject();\
+	return mo\
+  	.very()\
+  	.very()\
+  	.very()\
+  	.very()\
+  	.very()\
+  	.very()\
+  	.very()\
+  	.very()\
+  	.very()\
+  	.very()\
+  	.very()\
+  	.very()\
+  	.very()\
+  	.longMethod();\
+  \}\
+\}\
+\pard\pardeftab720\ri-4\sl276\slmult1\sb400\sa120\qj\partightenfactor0
+
+\fs40 \cf2 \
+\pard\pardeftab720\ri-4\sl276\slmult1\qj\partightenfactor0
+
+\fs22 \cf2 \
+\
+public class Prettier \{\
+ \
+  public boolean prettierIsAwesome(int myFirstArgument, int mySecondArgument, int myThirdArgument, int myFourthArgument, int myFifthArgument) \{\
+	mo.very().very().very().very().very().very().very().very().very().very().very().very().very().longMethod();\
+	// prettier-ignore\
+	mo.very().very().very().very().very().very().very().very().very().very().very().very().very().longMethod();\
+    \
+	// @formatter:off\
+	mo.very().very().very().very().very().very().very().very().very().very().very().very().very().longMethod();\
+	mo.very().very().very().very().very().very().very().very().very().very().very().very().very().longMethod();\
+	// @formatter:on\
+  \}\
+\}\
+\
+\
+\
+\pard\pardeftab720\ri-4\sl276\slmult1\partightenfactor0
+\cf2 public class Prettier \{\
+ \
+  public boolean prettierIsAwesome(\
+	int myFirstArgument,\
+	int mySecondArgument,\
+	int myThirdArgument,\
+	int myFourthArgument,\
+	int myFifthArgument\
+  ) \{\
+	mo\
+  	.very()\
+  	.very()\
+  	.very()\
+  	.very()\
+  	.very()\
+  	.very()\
+  	.very()\
+  	.very()\
+  	.very()\
+  	.very()\
+  	.very()\
+  	.very()\
+  	.very()\
+  	.longMethod();\
+	// prettier-ignore\
+	mo.very().very().very().very().very().very().very().very().very().very().very().very().very().longMethod();\
+ \
+	// @formatter:off\
+	mo.very().very().very().very().very().very().very().very().very().very().very().very().very().longMethod();\
+	mo.very().very().very().very().very().very().very().very().very().very().very().very().very().longMethod();\
+	// @formatter:on\
+  \}\
+\}\
+\pard\pardeftab720\ri-4\sl276\slmult1\sb360\sa120\qj\partightenfactor0
+
+\fs32 \cf2 \
+\pard\pardeftab720\ri-4\sl276\slmult1\qj\partightenfactor0
+
+\fs22 \cf2 \
+\
+# Cr\'e9ation du projet cible\
+mkdir myProject\
+cd myProject\
+git init\
+npm init\
+\
+# Mise en place du git hook\
+npm install prettier prettier-plugin-java pretty-quick husky --save-dev\
+npx husky install\
+npx husky set .husky/pre-commit "npx pretty-quick --staged"\
+\
+# Exemple d'application du git hook\
+echo "public	class MyClass \{\}" > MyClass.java\
+git add MyClass.java\
+git commit -m "commit de MyClass format\'e9 !"\
+\pard\pardeftab720\ri-4\sl276\slmult1\qj\partightenfactor0
+
+\fs20 \cf2 \
+\
+\
+\pard\pardeftab720\ri-4\sl276\slmult1\qj\partightenfactor0
+
+\fs22 \cf2 name: CI\
+on:\
+  push:\
+	branches: [ main ]\
+  pull_request:\
+	branches: [ main ]\
+ \
+  workflow_dispatch:\
+ \
+jobs:\
+  build:\
+	runs-on: ubuntu-latest\
+ \
+	steps:\
+  	- uses: actions/checkout@v2\
+ 	 \
+  	- uses: actions/setup-node@v2\
+    	with:\
+      	node-version: '12'\
+ \
+  	- name: Install Prettier-Java\
+    	run: npm install prettier prettier-plugin-java\
+ \
+  	- name: Check Prettier-Java format\
+    	run: npx prettier --check "**/*.java"\
+}
